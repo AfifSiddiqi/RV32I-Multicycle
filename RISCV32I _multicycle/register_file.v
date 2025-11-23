@@ -1,12 +1,3 @@
-//module register_file( rs1, rs2, rd, write_data, read_data1, read_data2);
-//input [4:0] rs1, rs2, rd;
-//input [31:0] write_data;
-//output [31:0] read_data1, read_data2;
-
-// Quartus Prime Verilog Template
-// Simple Dual Port RAM with separate read/write addresses and
-// single read/write clock
-
 module register_file
 #(parameter DATA_WIDTH=32, parameter ADDR_WIDTH=5)
 (
@@ -27,7 +18,8 @@ module register_file
 				ram[i] <= 32'd0;
 		end
 		// Write
-		else if (we)
+		// else if (we)
+		else if (we && (rd != 5'd0))
 			ram[rd] <= write_data;
 
 		// Read (if read_addr == write_addr, return OLD data).	To return
