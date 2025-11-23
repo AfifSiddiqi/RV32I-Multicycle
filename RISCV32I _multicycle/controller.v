@@ -1,353 +1,232 @@
 module controller(
-input [4:0]state,
-output reg RegWrite,ALUSrcA,MemRead,MemWrite,IorD,IRWrite,PCWrite,
-output reg[1:0] ALUOp, ALUSrcB, PCSource,
-output reg[2:0] MemtoReg,
-output reg[5:0] PcWriteCond );
+    input  [4:0] state,
+    output reg RegWrite,
+    output reg ALUSrcA,
+    output reg MemRead,
+    output reg MemWrite,
+    output reg IorD,
+    output reg IRWrite,
+    output reg PCWrite,
+    output reg [1:0] ALUOp,
+    output reg [1:0] ALUSrcB,
+    output reg [1:0] PCSource,
+    output reg [1:0] MemtoReg,
+    output reg [5:0] PcWriteCond
+);
 
-	
-	always@(*)
-	begin
-		case(state)
-		5'd0	: begin
-					PCWrite = 1'b1;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b1;
-					MemWrite = 1'b0;
-					IRWrite = 1'b1;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b0; 
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b01;
-					PCSource = 2'b00;
-					end
-				
-		5'd1	: begin
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b0;	
-					RegWrite = 1'b0;  
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b10;  
-					PCSource = 2'b00;
-					end
-				
-		5'd2	: begin
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;//0
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b10;
-					PCSource = 2'b00;
-					end
-				
-		5'd3	: begin
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b1;
-					MemRead = 1'b1;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b0;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b00;
-					end
-					
-				
-		5'd4	: begin                      //load
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b001;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b1;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b00;
-					end
-					
-		5'd5	: begin                          //store
-					PcWriteCond = 6'b000000;
-					IorD = 1'b1;
-					MemRead = 1'b0;
-					MemWrite = 1'b1;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b0;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b00;
-					end
-				
-		5'd6	: begin									//R-type
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;
-					ALUOp = 2'b10;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b00;
-					end
-				
-		5'd7	: begin 
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b1;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b00;
-					end
-			
-		5'd8	: begin 							//BEQ
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000001;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;
-					ALUOp = 2'b01;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b10; 
-					end
-				
-		5'd9	: begin                             //immediate
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;
-					ALUOp = 2'b10;
-					ALUSrcB = 2'b10;
-					PCSource = 2'b00;
-					end
-					
-		5'd10	: begin
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b1;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b00;
-					end
-					
-		5'd11	: begin								//JAL pc=pc+imm , rd = pc +4
-					PCWrite = 1'b1;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b011;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b1;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b01;   
-					PCSource = 2'b10;		
-					end
-					
-		5'd12	: begin								//JALr pc=rs1+imm
-					PCWrite = 1'b1;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b10;   
-					PCSource = 2'b00;  
-					end
-		
-		5'd13	: begin                             //SB
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b1;
-					MemRead = 1'b0;
-					MemWrite = 1'b1;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b0;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b00;
-					end
-					
-		5'd14 : begin                            //SH
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b1;
-					MemRead = 1'b0;
-					MemWrite = 1'b1;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b0;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b00;
-					end
-					
-		5'd15	: begin 							//BNE
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000010;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;
-					ALUOp = 2'b01;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b10; 
-					end
-					
-		5'd16	: begin 							//BLT
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000100;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;
-					ALUOp = 2'b01;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b10; 
-					end
-					
-		5'd17	: begin 							//BGE
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b001000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;
-					ALUOp = 2'b01;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b10;
-					end
-					
-		5'd18	: begin 							//BLTU
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b010000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;
-					ALUOp = 2'b01;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b10; 
-					end
-					
-		5'd19	: begin 							//BGEU
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b100000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b000;
-					ALUSrcA = 1'b1;
-					RegWrite = 1'b0;
-					ALUOp = 2'b01;
-					ALUSrcB = 2'b00;
-					PCSource = 2'b10; 
-					end
-					
-		5'd20	: begin 							//AUIPC
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b100;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b1;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b01;
-					PCSource = 2'b00;
-					end
-					
-					
-		5'd21	: begin 							//LUI
-					PCWrite = 1'b0;
-					PcWriteCond = 6'b000000;
-					IorD = 1'b0;
-					MemRead = 1'b0;
-					MemWrite = 1'b0;
-					IRWrite = 1'b0;
-					MemtoReg = 3'b010;
-					ALUSrcA = 1'b0;
-					RegWrite = 1'b1;
-					ALUOp = 2'b00;
-					ALUSrcB = 2'b01;
-					PCSource = 2'b00;
-					end
-					
+    always @(*) begin
+        // Default values
+        RegWrite   = 0;
+        ALUSrcA    = 0;
+        MemRead    = 0;
+        MemWrite   = 0;
+        IorD       = 0;
+        IRWrite    = 0;
+        PCWrite    = 0;
+        ALUOp      = 2'b00;
+        ALUSrcB    = 2'b00;
+        PCSource   = 2'b00;
+        MemtoReg   = 2'b00;
+        PcWriteCond = 6'b000000;
 
-		default: begin
-					RegWrite=1'bx;ALUSrcA=1'bx;MemRead=1'bx;MemWrite=1'bx;MemtoReg=3'bxxx;IorD=1'bx;IRWrite=1'bx;PCWrite=1'bx;PcWriteCond=6'bx;
-					ALUOp=2'bxx;ALUSrcB=2'bxx;PCSource=2'bxx;
-					end
-		
-		endcase
+        case (state)
 
-	end
-		
-endmodule		
+            // ==========================
+            // Instruction Fetch
+            // ==========================
+            5'd0: begin
+                PCWrite  = 1;
+                MemRead  = 1;
+                IRWrite  = 1;
+                ALUSrcB  = 2'b01;
+            end
+
+            // ==========================
+            // Decode
+            // ==========================
+            5'd1: begin
+                ALUSrcB = 2'b10;
+            end
+
+            // ==========================
+            // Effective Address Calc
+            // ==========================
+            5'd2: begin
+                ALUSrcA = 1;
+                ALUSrcB = 2'b10;
+            end
+
+            // ==========================
+            // Memory Read
+            // ==========================
+            5'd3: begin
+                IorD    = 1;
+                MemRead = 1;
+            end
+
+            // ==========================
+            // Load Write-Back
+            // ==========================
+            5'd4: begin
+                RegWrite = 1;
+                MemtoReg = 2'b01;
+            end
+
+            // ==========================
+            // Store
+            // ==========================
+            5'd5: begin
+                IorD     = 1;
+                MemWrite = 1;
+            end
+
+            // ==========================
+            // R‑type ALU Execute
+            // ==========================
+            5'd6: begin
+                ALUSrcA = 1;
+                ALUOp   = 2'b10;
+            end
+
+            // ==========================
+            // R‑Type Write Back
+            // ==========================
+            5'd7: begin
+                RegWrite = 1;
+            end
+
+            // ==========================
+            // BEQ
+            // ==========================
+            5'd8: begin
+                ALUSrcA = 1;
+                ALUOp   = 2'b01;
+                PCSource = 2'b10;
+                PcWriteCond = 6'b000001;
+            end
+
+            // ==========================
+            // Immediate ALU Execute
+            // ==========================
+            5'd9: begin
+                ALUSrcA = 1;
+                ALUSrcB = 2'b10;
+                ALUOp   = 2'b10;
+            end
+
+            // ==========================
+            // Immediate Write Back
+            // ==========================
+            5'd10: begin
+                RegWrite = 1;
+            end
+
+            // ==========================
+            // JAL
+            // ==========================
+            5'd11: begin
+                PCWrite  = 1;
+                RegWrite = 1;
+                PCSource = 2'b10;
+                ALUSrcB  = 2'b01;
+            end
+
+            // ==========================
+            // JALR
+            // ==========================
+            5'd12: begin
+                PCWrite  = 1;
+                RegWrite = 1;
+                PCSource = 2'b11;
+                ALUSrcB  = 2'b01;
+            end
+
+            // ==========================
+            // BNE
+            // ==========================
+            5'd13: begin
+                ALUSrcA = 1;
+                ALUOp = 2'b01;
+                PCSource = 2'b10;
+                PcWriteCond = 6'b000010;
+            end
+
+            // ==========================
+            // BLT
+            // ==========================
+            5'd14: begin
+                ALUSrcA = 1;
+                ALUOp = 2'b01;
+                PCSource = 2'b10;
+                PcWriteCond = 6'b000100;
+            end
+
+            // ==========================
+            // BGE
+            // ==========================
+            5'd15: begin
+                ALUSrcA = 1;
+                ALUOp = 2'b01;
+                PCSource = 2'b10;
+                PcWriteCond = 6'b001000;
+            end
+
+            // ==========================
+            // BLTU
+            // ==========================
+            5'd16: begin
+                ALUSrcA = 1;
+                ALUOp = 2'b01;
+                PCSource = 2'b10;
+                PcWriteCond = 6'b010000;
+            end
+
+            // ==========================
+            // BGEU
+            // ==========================
+            5'd17: begin
+                ALUSrcA = 1;
+                ALUOp = 2'b01;
+                PCSource = 2'b10;
+                PcWriteCond = 6'b100000;
+            end
+
+            // ==========================
+            // AUIPC
+            // ==========================
+            5'd18: begin
+                RegWrite = 1;
+                ALUSrcB  = 2'b01;
+                MemtoReg = 2'b11;
+            end
+
+            // ==========================
+            // LUI
+            // ==========================
+            5'd19: begin
+                RegWrite = 1;
+                ALUSrcB  = 2'b01;
+                MemtoReg = 2'b10;
+            end
+
+            // ==========================
+            // Default
+            // ==========================
+            default: begin
+                RegWrite   = 1'bx;
+                ALUSrcA    = 1'bx;
+                MemRead    = 1'bx;
+                MemWrite   = 1'bx;
+                IorD       = 1'bx;
+                IRWrite    = 1'bx;
+                PCWrite    = 1'bx;
+                ALUOp      = 2'bxx;
+                ALUSrcB    = 2'bxx;
+                PCSource   = 2'bxx;
+                MemtoReg   = 3'bxxx;
+                PcWriteCond = 6'bxxxxxx;
+            end
+        endcase
+    end
+
+endmodule
