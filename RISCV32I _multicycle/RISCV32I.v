@@ -32,7 +32,7 @@ module RISCV32I(
     wire [4:0]   state_out;
     wire [5:0]   pcwritecond;
 
-    wire [31:0]  jal, jalr, jump_out, store_out, auipc, load_out;
+    wire [31:0]  jal, jalr, store_out, auipc, load_out;
     wire         a_n_d_1, a_n_d_2, a_n_d_3, a_n_d_4, a_n_d_5, a_n_d_6;
 
     //--------------------------------------------------------------------------
@@ -180,13 +180,6 @@ module RISCV32I(
         .q     (alu_result_reg)
     );
 
-    register jump_reg (
-        .clk   (clk_in),
-        .reset (rst_in),
-        .d     (alu_result_reg),
-        .q     (jump_out)
-    );
-
     mux_4x1 mux5 (
         .a (alu_result),
         .b (alu_result_reg),
@@ -241,5 +234,6 @@ module RISCV32I(
     assign data_out = store_out;
 
 endmodule
+
 
 
