@@ -223,10 +223,11 @@ module controller(
                 ALUOp      = 2'bxx;
                 ALUSrcB    = 2'bxx;
                 PCSource   = 2'bxx;
-                MemtoReg   = 3'bxxx;
+                MemtoReg   = 2'bxx;
                 PcWriteCond = 6'bxxxxxx;
             end
         endcase
     end
 
 endmodule
+
